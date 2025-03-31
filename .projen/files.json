@@ -5,6 +5,7 @@
     ".github/pull_request_template.md",
     ".github/workflows/check-workflows.yml",
     ".github/workflows/pull-request-lint.yml",
+    ".github/workflows/pull-request.yml",
     ".github/workflows/push.yml",
     ".github/workflows/test.yml",
     ".gitignore",

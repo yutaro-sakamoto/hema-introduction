@@ -8,6 +8,7 @@
 /.github/workflows/build.yml linguist-generated
 /.github/workflows/check-workflows.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
+/.github/workflows/pull-request.yml linguist-generated
 /.github/workflows/push.yml linguist-generated
 /.github/workflows/test.yml linguist-generated
 /.github/workflows/upgrade.yml linguist-generated

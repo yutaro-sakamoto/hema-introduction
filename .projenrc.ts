@@ -129,4 +129,66 @@ new YamlFile(project, '.github/workflows/test.yml', {
   },
 });
 
+new YamlFile(project, '.github/workflows/pull-request.yml', {
+  obj: {
+    name: 'pull request',
+    on: {
+      pull_request: {
+        types: ['opened', 'reopened', 'review_requested', 'synchronize'],
+      },
+    },
+    concurrency: {
+      'group': '${{ github.workflow }}-${{ github.ref }}',
+      'cancel-in-progress': true,
+    },
+    jobs: {
+      'check-workflows': {
+        permissions: {
+          contents: 'read',
+        },
+        uses: './.github/workflows/check-workflows.yml',
+      },
+      'test': {
+        needs: 'check-workflows',
+        permissions: {
+          contents: 'read',
+        },
+        secrets: 'inherit',
+        uses: './.github/workflows/test.yml',
+      },
+      // 'cdk-diff-comment': {
+      //   needs: 'check-workflows',
+      //   if: "github.actor != 'dependabot[bot]'",
+      //   permissions: {
+      //     'id-token': 'write',
+      //     contents: 'write',
+      //     'pull-requests': 'write',
+      //   },
+      //   secrets: 'inherit',
+      //   uses: './.github/workflows/post-cdk-diff.yml',
+      // },
+      // 'auto-merge-dependabot-pr': {
+      //   needs: ['test'],
+      //   if: "github.actor == 'dependabot[bot]'",
+      //   'runs-on': 'ubuntu-latest',
+      //   permissions: {
+      //     contents: 'write',
+      //     'pull-requests': 'write',
+      //   },
+      //   steps: [
+      //     {
+      //       uses: 'actions/checkout@v4',
+      //     },
+      //     {
+      //       run: 'gh pr merge "${GITHUB_HEAD_REF}" --squash --auto',
+      //       env: {
+      //         GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',
+      //       },
+      //     },
+      //   ],
+      // },
+    },
+  },
+});
+
 project.synth();
