@@ -13,6 +13,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 });
 project.addDeps('cdk-nag');
 
+project.tryRemoveFile('.github/workflows/build.yml');
+project.tryRemoveFile('.github/workflows/upgrade.yml');
+
 new YamlFile(project, '.github/workflows/check-workflows.yml', {
   obj: {
     name: 'Check workflow files',
@@ -88,8 +91,7 @@ new YamlFile(project, '.github/workflows/test.yml', {
     jobs: {
       test: {
         'runs-on': 'ubuntu-latest',
-        'environment': '${{ inputs.environment }}',
-        'steps': [
+        steps: [
           {
             name: 'Checkout',
             uses: 'actions/checkout@v4',
