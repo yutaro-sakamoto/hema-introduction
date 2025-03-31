@@ -1,10 +1,10 @@
 import { App, Stack, StackProps } from "aws-cdk-lib";
-import { Construct } from "constructs";
-import * as s3 from "aws-cdk-lib/aws-s3";
+import * as cdk from "aws-cdk-lib";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
-import * as cdk from "aws-cdk-lib";
+import * as s3 from "aws-cdk-lib/aws-s3";
 import { AwsSolutionsChecks, NagSuppressions } from "cdk-nag";
+import { Construct } from "constructs";
 
 export class StaticWebsiteStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
