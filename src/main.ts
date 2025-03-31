@@ -59,7 +59,7 @@ export class StaticWebsiteStack extends Stack {
 
     // distフォルダの内容をS3バケットにデプロイ
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
-      sources: [s3deploy.Source.asset("../dist")],
+      sources: [s3deploy.Source.asset("dist")],
       destinationBucket: websiteBucket,
       distribution,
       distributionPaths: ["/*"],
@@ -80,7 +80,16 @@ const devEnv = {
 
 const app = new App();
 
-new StaticWebsiteStack(app, "hema-introduction-dev", { env: devEnv });
+const stack = new StaticWebsiteStack(app, "hema-introduction-dev", {
+  env: devEnv,
+});
 cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
-
+NagSuppressions.addStackSuppressions(stack, [
+  { id: "AwsSolutions-IAM5", reason: "Allow IAM policies to contain *" },
+  { id: "AwsSolutions-IAM4", reason: "Allow using managed policies" },
+  {
+    id: "AwsSolutions-L1",
+    reason: "Allow to use lambda functions deployed by s3deploy",
+  },
+]);
 app.synth();
