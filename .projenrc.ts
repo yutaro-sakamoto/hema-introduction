@@ -11,7 +11,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 project.addDeps('cdk-nag');
+project.addDeps('@marp-team/marp-cli');
 project.gitignore.addPatterns('docs');
+project.gitignore.addPatterns('slide.html');
 
 project.tryRemoveFile('.github/workflows/build.yml');
 project.tryRemoveFile('.github/workflows/upgrade.yml');

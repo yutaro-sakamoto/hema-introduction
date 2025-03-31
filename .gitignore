@@ -50,6 +50,7 @@ junit.xml
 .cdk.staging/
 .parcel-cache/
 docs
+slide.html
 !/.github/workflows/check-workflows.yml
 !/.github/workflows/push.yml
 !/.github/workflows/test.yml
