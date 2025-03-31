@@ -268,8 +268,7 @@ new YamlFile(project, '.github/workflows/deploy.yml', {
             name: 'Set environment variables',
             run: `
               echo CDK_DEFAULT_REGION="\${{ secrets.AWS_REGION }}" >> "$GITHUB_ENV" &&
-              echo CDK_DEFAULT_ACCOUNT="\${{ secrets.AWS_ID }}" >> "$GITHUB_ENV" &&
-              echo AWS_CODECONNECTIONS_ARN="\${{ secrets.AWS_CODECONNECTIONS_ARN }}" >> "$GITHUB_ENV"
+              echo CDK_DEFAULT_ACCOUNT="\${{ secrets.AWS_ID }}" >> "$GITHUB_ENV"
             `,
           },
           {
