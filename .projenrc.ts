@@ -272,6 +272,10 @@ new YamlFile(project, '.github/workflows/deploy.yml', {
             run: 'yarn install',
           },
           {
+            name: 'generate a slide file',
+            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
+          },
+          {
             name: 'Set environment variables',
             run: `
               echo CDK_DEFAULT_REGION="\${{ secrets.AWS_REGION }}" >> "$GITHUB_ENV" &&
