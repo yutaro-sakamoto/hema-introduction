@@ -112,7 +112,7 @@ new YamlFile(project, '.github/workflows/test.yml', {
           },
           {
             name: 'generate a slide file',
-            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
+            run: 'mkdir -p dist && cp -r asset dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
           },
           {
             name: 'Check format by Prettier',
@@ -273,7 +273,7 @@ new YamlFile(project, '.github/workflows/deploy.yml', {
           },
           {
             name: 'generate a slide file',
-            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
+            run: 'mkdir -p dist && cp -r asset dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
           },
           {
             name: 'Set environment variables',
