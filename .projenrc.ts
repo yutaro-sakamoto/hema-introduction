@@ -52,7 +52,7 @@ new YamlFile(project, '.github/workflows/push.yml', {
     name: 'push',
     on: {
       push: {
-        'branches-ignore': ['dev'],
+        'branches-ignore': ['main'],
       },
     },
     concurrency: {
