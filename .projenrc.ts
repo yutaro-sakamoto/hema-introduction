@@ -15,6 +15,7 @@ project.gitignore.addPatterns('docs');
 
 project.tryRemoveFile('.github/workflows/build.yml');
 project.tryRemoveFile('.github/workflows/upgrade.yml');
+project.tryRemoveFile('.github/workflows/pull-request-lint.yml');
 
 new YamlFile(project, '.github/workflows/check-workflows.yml', {
   obj: {
