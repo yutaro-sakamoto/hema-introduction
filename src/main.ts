@@ -5,6 +5,7 @@ import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import { AwsSolutionsChecks, NagSuppressions } from "cdk-nag";
 import { Construct } from "constructs";
+import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 
 export class StaticWebsiteStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -56,6 +57,14 @@ export class StaticWebsiteStack extends Stack {
       },
     ]);
 
+    // distフォルダの内容をS3バケットにデプロイ
+    new s3deploy.BucketDeployment(this, "DeployWebsite", {
+      sources: [s3deploy.Source.asset("dist")],
+      destinationBucket: websiteBucket,
+      distribution,
+      distributionPaths: ["/*"],
+    });
+
     new cdk.CfnOutput(this, "CloudFrontURL", {
       value: distribution.distributionDomainName,
       description: "CloudFront Distribution URL",
@@ -71,7 +80,16 @@ const devEnv = {
 
 const app = new App();
 
-new StaticWebsiteStack(app, "hema-introduction-dev", { env: devEnv });
+const stack = new StaticWebsiteStack(app, "hema-introduction-dev", {
+  env: devEnv,
+});
 cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
-
+NagSuppressions.addStackSuppressions(stack, [
+  { id: "AwsSolutions-IAM5", reason: "Allow IAM policies to contain *" },
+  { id: "AwsSolutions-IAM4", reason: "Allow using managed policies" },
+  {
+    id: "AwsSolutions-L1",
+    reason: "Allow to use lambda functions deployed by s3deploy",
+  },
+]);
 app.synth();

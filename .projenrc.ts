@@ -11,7 +11,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 project.addDeps('cdk-nag');
+project.addDeps('@marp-team/marp-cli');
 project.gitignore.addPatterns('docs');
+project.gitignore.addPatterns('slide.html');
 
 project.tryRemoveFile('.github/workflows/build.yml');
 project.tryRemoveFile('.github/workflows/upgrade.yml');
@@ -107,6 +109,10 @@ new YamlFile(project, '.github/workflows/test.yml', {
           },
           {
             run: 'yarn install',
+          },
+          {
+            name: 'generate a slide file',
+            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
           },
           {
             name: 'Check format by Prettier',
@@ -264,6 +270,10 @@ new YamlFile(project, '.github/workflows/deploy.yml', {
           },
           {
             run: 'yarn install',
+          },
+          {
+            name: 'generate a slide file',
+            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
           },
           {
             name: 'Set environment variables',
