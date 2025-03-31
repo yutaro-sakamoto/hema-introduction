@@ -1,5 +1,4 @@
-import { awscdk } from 'projen';
-import { YamlFile } from 'projen';
+import { awscdk, YamlFile } from 'projen';
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.1.0',
   defaultReleaseBranch: 'main',
@@ -91,7 +90,7 @@ new YamlFile(project, '.github/workflows/test.yml', {
     jobs: {
       test: {
         'runs-on': 'ubuntu-latest',
-        steps: [
+        'steps': [
           {
             name: 'Checkout',
             uses: 'actions/checkout@v4',
