@@ -5,6 +5,7 @@ import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import { AwsSolutionsChecks, NagSuppressions } from "cdk-nag";
 import { Construct } from "constructs";
+import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 
 export class StaticWebsiteStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -55,6 +56,14 @@ export class StaticWebsiteStack extends Stack {
         reason: "CloudFront Distribution uses the default CloudFront viewer",
       },
     ]);
+
+    // distフォルダの内容をS3バケットにデプロイ
+    new s3deploy.BucketDeployment(this, "DeployWebsite", {
+      sources: [s3deploy.Source.asset("../dist")],
+      destinationBucket: websiteBucket,
+      distribution,
+      distributionPaths: ["/*"],
+    });
 
     new cdk.CfnOutput(this, "CloudFrontURL", {
       value: distribution.distributionDomainName,
