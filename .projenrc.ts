@@ -273,7 +273,7 @@ new YamlFile(project, '.github/workflows/deploy.yml', {
             `,
           },
           {
-            name: 'Deploy EcsDeployPipeline Stack',
+            name: 'Deploy a stack',
             run: 'npx cdk deploy --require-approval never --outputs-file cdk-outputs-ecs-deploy.json --all',
           },
         ],
