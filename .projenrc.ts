@@ -111,6 +111,10 @@ new YamlFile(project, '.github/workflows/test.yml', {
             run: 'yarn install',
           },
           {
+            name: 'generate a slide file',
+            run: 'mkdir -p dist && npx @marp-team/marp-cli slide.md -o dist/slide.html',
+          },
+          {
             name: 'Check format by Prettier',
             run: 'npx prettier src test --check',
           },
