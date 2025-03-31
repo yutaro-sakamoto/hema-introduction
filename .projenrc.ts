@@ -191,4 +191,96 @@ new YamlFile(project, '.github/workflows/pull-request.yml', {
   },
 });
 
+// Deploy to AWS
+new YamlFile(project, '.github/workflows/push-main.yml', {
+  obj: {
+    name: 'push',
+    on: {
+      push: {
+        branches: ['main'],
+      },
+    },
+    concurrency: {
+      'group': '${{ github.workflow }}-${{ github.ref }}',
+      'cancel-in-progress': true,
+    },
+    permissions: {
+      contents: 'read',
+    },
+    jobs: {
+      'check-workflows': {
+        permissions: {
+          contents: 'read',
+        },
+        uses: './.github/workflows/check-workflows.yml',
+      },
+      'deploy': {
+        needs: 'check-workflows',
+        permissions: {
+          'contents': 'read',
+          'id-token': 'write',
+        },
+        secrets: 'inherit',
+        uses: './.github/workflows/deploy.yml',
+      },
+    },
+  },
+});
+
+// Deploy to AWS
+new YamlFile(project, '.github/workflows/deploy.yml', {
+  obj: {
+    name: 'deploy',
+    on:
+      'workflow_call',
+    permissions: {
+      'contents': 'read',
+      'id-token': 'write',
+    },
+    jobs: {
+      deploy: {
+        'runs-on': 'ubuntu-latest',
+        steps: [
+          {
+            uses: 'aws-actions/configure-aws-credentials@v4',
+            with: {
+              'role-to-assume': 'arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}',
+              'role-session-name': 'gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}',
+              'aws-region': '${{ secrets.AWS_REGION }}',
+            },
+          },
+          {
+            name: 'Checkout',
+            uses: 'actions/checkout@v4',
+          },
+          {
+            uses: 'actions/setup-node@v4',
+            with: {
+              'node-version': '22',
+              'cache': 'yarn',
+              'cache-dependency-path': 'yarn.lock',
+            },
+          },
+          {
+            run: 'yarn install',
+          },
+          {
+            name: 'Set environment variables',
+            run: `
+              echo CDK_DEFAULT_REGION="\${{ secrets.AWS_REGION }}" >> "$GITHUB_ENV" &&
+              echo CDK_DEFAULT_ACCOUNT="\${{ secrets.AWS_ID }}" >> "$GITHUB_ENV" &&
+              echo AWS_CODECONNECTIONS_ARN="\${{ secrets.AWS_CODECONNECTIONS_ARN }}" >> "$GITHUB_ENV"
+            `,
+          },
+          {
+            name: 'Deploy EcsDeployPipeline Stack',
+            run: 'npx cdk deploy --require-approval never --outputs-file cdk-outputs-ecs-deploy.json aws-cobol-cicd-example-dev-ecs-pipeline',
+          },
+        ],
+      },
+    },
+  },
+});
+
+
 project.synth();

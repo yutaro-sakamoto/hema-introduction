@@ -54,4 +54,6 @@ docs
 !/.github/workflows/push.yml
 !/.github/workflows/test.yml
 !/.github/workflows/pull-request.yml
+!/.github/workflows/push-main.yml
+!/.github/workflows/deploy.yml
 !/.projenrc.ts
