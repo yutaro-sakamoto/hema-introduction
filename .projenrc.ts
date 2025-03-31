@@ -10,4 +10,5 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // devDeps: [],             /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+project.addDeps('cdk-nag');
 project.synth();
