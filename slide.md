@@ -14,6 +14,8 @@
 
 # 動画
 
+* https://drive.google.com/file/d/12YIRaIGUymf9tt5IEZ-vG5_QW42Z56TB/view?usp=drive_link
+
 ---
 
 # ルール
@@ -32,6 +34,7 @@
 * 剣が(スポーツチャンバラ)より重く、腕の筋力が必要
 
 ---
+
 # 参加方法
 
 * Meetupというサービスの[HEMA Tokyo](https://www.meetup.com/hema-tokyo/)というグループから申し込む
@@ -72,6 +75,12 @@
 * セキュリティチェック: cdk-nag
 * CI/CD: GitHub Actions
 * 生成AI: Claude 3.7, GitHub Copilot
+
+---
+
+# やり残したこと
+
+* 動画をAWS Elemental MediaConvertで適当な形式に変換して、S3にアップロードし、AWSから動画を配信する。
 
 ---
 
