@@ -1,17 +1,17 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import * as cdk from 'aws-cdk-lib';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as s3 from 'aws-cdk-lib/aws-s3';
-import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { Construct } from 'constructs';
+import { App, Stack, StackProps } from "aws-cdk-lib";
+import * as cdk from "aws-cdk-lib";
+import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
+import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import { AwsSolutionsChecks, NagSuppressions } from "cdk-nag";
+import { Construct } from "constructs";
 
 export class StaticWebsiteStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
     // S3バケットの作成
 
-    const accessLogBucket = new s3.Bucket(this, 'AccessLogBucket', {
+    const accessLogBucket = new s3.Bucket(this, "AccessLogBucket", {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // スタック削除時にバケットを削除
       autoDeleteObjects: true, // バケット内のオブジェクトも削除
       enforceSSL: true, // SSLを強制
@@ -22,7 +22,7 @@ export class StaticWebsiteStack extends Stack {
       ],
     });
 
-    const websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
+    const websiteBucket = new s3.Bucket(this, "WebsiteBucket", {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // スタック削除時にバケットを削除
       autoDeleteObjects: true, // バケット内のオブジェクトも削除
       enforceSSL: true, // SSLを強制
@@ -32,9 +32,9 @@ export class StaticWebsiteStack extends Stack {
     // CloudFrontディストリビューションの作成
     const distribution = new cloudfront.Distribution(
       this,
-      'WebsiteDistribution',
+      "WebsiteDistribution",
       {
-        defaultRootObject: 'index.html',
+        defaultRootObject: "index.html",
         defaultBehavior: {
           origin: origins.S3BucketOrigin.withOriginAccessControl(websiteBucket),
           viewerProtocolPolicy:
@@ -45,20 +45,20 @@ export class StaticWebsiteStack extends Stack {
         enableLogging: true,
         logBucket: accessLogBucket,
         logIncludesCookies: true,
-        logFilePrefix: 'cloudfront-logs/',
+        logFilePrefix: "cloudfront-logs/",
       },
     );
 
     NagSuppressions.addResourceSuppressions(distribution, [
       {
-        id: 'AwsSolutions-CFR4',
-        reason: 'CloudFront Distribution uses the default CloudFront viewer',
+        id: "AwsSolutions-CFR4",
+        reason: "CloudFront Distribution uses the default CloudFront viewer",
       },
     ]);
 
-    new cdk.CfnOutput(this, 'CloudFrontURL', {
+    new cdk.CfnOutput(this, "CloudFrontURL", {
       value: distribution.distributionDomainName,
-      description: 'CloudFront Distribution URL',
+      description: "CloudFront Distribution URL",
     });
   }
 }
@@ -71,7 +71,7 @@ const devEnv = {
 
 const app = new App();
 
-new StaticWebsiteStack(app, 'hema-introduction-dev', { env: devEnv });
+new StaticWebsiteStack(app, "hema-introduction-dev", { env: devEnv });
 cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
 
 app.synth();

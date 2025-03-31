@@ -4,7 +4,7 @@ name: push
 on:
   push:
     branches-ignore:
-      - dev
+      - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

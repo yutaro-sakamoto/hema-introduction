@@ -11,6 +11,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 project.addDeps('cdk-nag');
+project.gitignore.addPatterns('docs');
 
 project.tryRemoveFile('.github/workflows/build.yml');
 project.tryRemoveFile('.github/workflows/upgrade.yml');
